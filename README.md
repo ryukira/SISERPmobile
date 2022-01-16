@@ -1,4 +1,4 @@
-# Dypos
+# SISERP
 
 Point of sales Application using Flutter + Firebase Database
 Supported and Integrated with Website Admin using CodeIgniter
@@ -20,6 +20,5 @@ Feature:
 - Report in website
 - Printing Receipt using POS Printer(Tested using TM-u220 Dot Matrix Epson)
 
-Andy Johannes
-
+RB
 
