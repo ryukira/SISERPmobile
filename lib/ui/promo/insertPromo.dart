@@ -21,37 +21,35 @@ class FormKeys {
   static final supplierKey = const Key('supplierKey');
 }
 
-class _AddPageState extends State<AddPage>{
-
+class _AddPageState extends State<AddPage> {
   String idUser;
   String _nama;
 
-        
-        String finalCode;
+  String finalCode;
   final format = DateFormat("yyyy-MM-dd");
   TextEditingController promoNameController = new TextEditingController();
   TextEditingController promoQtyController = new TextEditingController();
   TextEditingController promoDscController = new TextEditingController();
-      // DateTime now = DateTime.now();
-   List<GregorianCalendar> days = new List();
-   bool _correctDate=false;
- 
+  // DateTime now = DateTime.now();
+  List<GregorianCalendar> days = new List();
+  bool _correctDate = false;
 
   final GlobalKey<FormState> _formKeyAddSupplier = new GlobalKey<FormState>();
 
-  _loadUid() async {             
+  _loadUid() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      idUser = (prefs.getString ('uid')??'');
+      idUser = (prefs.getString('uid') ?? '');
     });
   }
-  
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _loadUid();
   }
-  String dateEnd= 'Date End: ';
+
+  String dateEnd = 'Date End: ';
   DateTime selectedDate = DateTime.now();
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -60,75 +58,77 @@ class _AddPageState extends State<AddPage>{
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-      
 
-      if(picked != null && picked != selectedDate ){
-        if(picked.isBefore(DateTime.now())){
-          print("error");
-          _correctDate=false;
-        }else{
-          _correctDate=true;
-          print("benar");
-        }
-        setState(() {
-          selectedDate = picked;
-          dateEnd = 'Date End: ${selectedDate.toString()}';
-        });
-        // print("ASDASDAS {$dateEnd}");
+    if (picked != null && picked != selectedDate) {
+      if (picked.isBefore(DateTime.now())) {
+        print("error");
+        _correctDate = false;
+      } else {
+        _correctDate = true;
+        print("benar");
       }
-
-  }
-  
-    String randomTodo(_nama){
-      final code = randomAlpha(5);
-      final randomNumber = Random().nextInt(9).ceil();
-
-      final code2 = _nama.substring(0, 2);
-
       setState(() {
-          finalCode = code2 + code.toString() + randomNumber.toString(); 
+        selectedDate = picked;
+        dateEnd = 'Date End: ${selectedDate.toString()}';
       });
-      return finalCode;
+      // print("ASDASDAS {$dateEnd}");
     }
+  }
 
-  Future<void> insertSupplier() async{
-      try{
-        if(_correctDate==true){
-                _nama=promoNameController.text;
-          // _minQty=int.tryParse(promoQtyController.text);
-          // _dsc=int.tryParse(promoDscController.text);
-          // _dateEnd = selectedDate;
+  String randomTodo(_nama) {
+    final code = randomAlpha(5);
+    final randomNumber = Random().nextInt(9).ceil();
 
-          String formattedTime = DateFormat('yyyy-MM-dd hh:mm').format(selectedDate);  
-          print("testId");
-          print(idUser);
-    
-          randomTodo(_nama);
-          print(finalCode);
-          
-          Firestore.instance.collection('owner').document(idUser).collection('promo').add({
-            'promo_name': '$_nama ',
-            'promo_endDate': formattedTime,
-            'promo_code': finalCode.toUpperCase()
-          });
+    final code2 = _nama.substring(0, 2);
 
-          promoNameController.clear();
-          promoQtyController.clear();
-          promoDscController.clear();
-          _showDialog();
-        }else{
-          print("format salah coeg");
-        }
-    
-        
-        // Navigator.push(
-        //   context,  
-        //   MaterialPageRoute(builder: (context) => Home(user: email)) ,
-        // );
-      }catch(e){
-        print(e.toString());
+    setState(() {
+      finalCode = code2 + code.toString() + randomNumber.toString();
+    });
+    return finalCode;
+  }
+
+  Future<void> insertSupplier() async {
+    try {
+      if (_correctDate == true) {
+        _nama = promoNameController.text;
+        // _minQty=int.tryParse(promoQtyController.text);
+        // _dsc=int.tryParse(promoDscController.text);
+        // _dateEnd = selectedDate;
+
+        String formattedTime =
+            DateFormat('yyyy-MM-dd hh:mm').format(selectedDate);
+        print("testId");
+        print(idUser);
+
+        randomTodo(_nama);
+        print(finalCode);
+
+        Firestore.instance
+            .collection('owner')
+            .document(idUser)
+            .collection('promo')
+            .add({
+          'promo_name': '$_nama ',
+          'promo_endDate': formattedTime,
+          'promo_code': finalCode.toUpperCase()
+        });
+
+        promoNameController.clear();
+        promoQtyController.clear();
+        promoDscController.clear();
+        _showDialog();
+      } else {
+        print("format salah coeg");
       }
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => Home(user: email)) ,
+      // );
+    } catch (e) {
+      print(e.toString());
     }
+  }
 
   void _showDialog() {
     // flutter defined function
@@ -153,97 +153,92 @@ class _AddPageState extends State<AddPage>{
     );
   }
 
-  Widget body(BuildContext context){
-
-     Size screenSize = MediaQuery.of(context).size;
-          return new Scaffold(
-            resizeToAvoidBottomPadding: true,
-            body: new SingleChildScrollView(
-              child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                  new Column(
-                    children:<Widget>[
-                      SizedBox(
-                        height: screenSize.height/10,
+  Widget body(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+    return new Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: new SingleChildScrollView(
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              new Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: screenSize.height / 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30.0, 0.0, 20.0, 0.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.text_format, color: Colors.red),
+                        labelText: "Promo Name",
                       ),
-                       Padding(
-                        padding: const EdgeInsets.fromLTRB(30.0, 0.0, 20.0, 0.0),
-                        child:   TextFormField(
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.text_format, color: Colors.red),
-                            labelText: "Promo Name",
-                          )
-                          ,controller:promoNameController,
-                          // focusNode: supplierNameFocus,
-                        ),
-                      ),
-                  
-                      // Padding(
-                      //   padding: const EdgeInsets.fromLTRB(30.0, 0.0, 20.0, 0.0),
-                      //   child: TextFormField(
-                      //     decoration: InputDecoration(
-                      //       icon: Icon(Icons.account_balance, color: Colors.red),
-                      //       labelText: "Minimum Buy Product",
-
-                      //     )
-                      //     ,controller:promoQtyController,
-                      //     // focusNode: supplierAddressFocus,
-                      //     keyboardType: TextInputType.number,
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.fromLTRB(30.0, 0.0, 20.0, 0.0),
-                      //   child: TextFormField(
-                      //     decoration: InputDecoration(
-                      //       icon: Icon(Icons.vertical_align_bottom, color: Colors.red),
-                      //       labelText: "Discount (%)",
-                      //     )
-                      //     ,controller:promoDscController,
-                      //     // focusNode: supplierPhoneFocus,
-                      //     keyboardType:TextInputType.number,
-                      //   ),
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30.0, 0.0, 20.0, 0.0),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.calendar_today, color: Colors.red),
-                            labelText: dateEnd,
-                          )
-                          ,
-                          enabled: false,
-                          // focusNode: supplierPhoneFocus,
-                          keyboardType:TextInputType.number,
-                        ),
-                      ),
-                        RaisedButton(
-                      onPressed: () => _selectDate(context),
-                      child: Text('Select date end promo'),
+                      controller: promoNameController,
+                      // focusNode: supplierNameFocus,
                     ),
-                      new MaterialButton(
-                        child: new Text("Add Promo", style: new TextStyle(color: Colors.white),),
-                        color: Colors.lightBlue,
-                        onPressed: (){
-                          insertSupplier();
-                          //  print(days);
-                        }
-                    )
-                          ],
-                        )
-                    // Text("${selectedDate.toLocal()}"),
-        
-                  
-              ],
-            ),
-          )
-          );}
+                  ),
+
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(30.0, 0.0, 20.0, 0.0),
+                  //   child: TextFormField(
+                  //     decoration: InputDecoration(
+                  //       icon: Icon(Icons.account_balance, color: Colors.red),
+                  //       labelText: "Minimum Buy Product",
+
+                  //     )
+                  //     ,controller:promoQtyController,
+                  //     // focusNode: supplierAddressFocus,
+                  //     keyboardType: TextInputType.number,
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(30.0, 0.0, 20.0, 0.0),
+                  //   child: TextFormField(
+                  //     decoration: InputDecoration(
+                  //       icon: Icon(Icons.vertical_align_bottom, color: Colors.red),
+                  //       labelText: "Discount (%)",
+                  //     )
+                  //     ,controller:promoDscController,
+                  //     // focusNode: supplierPhoneFocus,
+                  //     keyboardType:TextInputType.number,
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(30.0, 0.0, 20.0, 0.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today, color: Colors.red),
+                        labelText: dateEnd,
+                      ),
+                      enabled: false,
+                      // focusNode: supplierPhoneFocus,
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+                  RaisedButton(
+                    onPressed: () => _selectDate(context),
+                    child: Text('Select date end promo'),
+                  ),
+                  new MaterialButton(
+                      child: new Text(
+                        "Add Promo",
+                        style: new TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.lightBlue,
+                      onPressed: () {
+                        insertSupplier();
+                        //  print(days);
+                      })
+                ],
+              )
+              // Text("${selectedDate.toLocal()}"),
+            ],
+          ),
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: body(context),
-      key:_formKeyAddSupplier
-    );
+    return Container(child: body(context), key: _formKeyAddSupplier);
   }
 }
