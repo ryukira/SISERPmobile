@@ -1,8 +1,6 @@
 package companycoba.ta_dypos;
 
-import android.os.Bundle;
-import io.flutter.app.FlutterActivity;
-import io.flutter.plugins.GeneratedPluginRegistrant;
+import io.flutter.embedding.android.FlutterActivity;
 // import java.companycoba.ta_andypos.adapter;
 // import br.com.samhaus.escposprinter.adapter.USBPrinterAdapter;
 // import java.companycoba.ta_andypos.adapter.USBPrinterAdapter;
@@ -84,9 +82,4 @@ public class MainActivity extends FlutterActivity {
   //       adapter.printRawData(base64Data);
   //       result.success(true);
   //   }
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    GeneratedPluginRegistrant.registerWith(this);
-  }
 }
